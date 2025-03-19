@@ -1,11 +1,10 @@
 FROM almalinux:9.4
 
 # Install dependencies
-RUN dnf remove -y curl-minimal \
-    && dnf install -y epel-release \
+RUN dnf install -y epel-release \
     && dnf install -y dnf-utils \
     && dnf config-manager --set-enabled crb \
-    && dnf install -y \
+    && dnf install -y --allowerasing \
         sudo \
         httpd \
         mariadb-server \
@@ -78,6 +77,7 @@ RUN dnf remove -y curl-minimal \
         lsof \
         strace \
     && dnf clean all
+
 
 
 
