@@ -1,7 +1,8 @@
 FROM almalinux:9.4
 
 # Install dependencies
-RUN dnf install -y epel-release \
+RUN dnf remove -y curl-minimal \
+    && dnf install -y epel-release \
     && dnf install -y dnf-utils \
     && dnf config-manager --set-enabled crb \
     && dnf install -y \
@@ -77,6 +78,7 @@ RUN dnf install -y epel-release \
         lsof \
         strace \
     && dnf clean all
+
 
 
 # Install Composer
