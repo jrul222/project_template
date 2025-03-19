@@ -20,7 +20,30 @@
       "label": "web https"
     }
   },
-  "postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images'",
-  "postCreateCommand": "ddev start -y",
-  "postStartCommand": "ddev composer global config allow-plugins true && ddev composer config allow-plugins.composer/installers true && ddev composer config allow-plugins.drupal/core-composer-scaffold true && ddev composer config allow-plugins.cweagans/composer-patches true && ddev composer config allow-plugins.zaporylie/composer-drupal-optimizations true && ddev composer config allow-plugins.drupal/console-extend-plugin true && ddev composer config allow-plugins.oomphinc/composer-installers-extender true && ddev composer install && .ddev/uk-site-install.sh"
+  "postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images && ddev start -y'",
+  "postStartCommand": "ddev composer global config allow-plugins true && ddev composer config allow-plugins.composer/installers true && ddev composer config allow-plugins.drupal/core-composer-scaffold true && ddev composer config allow-plugins.cweagans/composer-patches true && ddev composer config allow-plugins.zaporylie/composer-drupal-optimizations true && ddev composer config allow-plugins.drupal/console-extend-plugin true && ddev composer config allow-plugins.oomphinc/composer-installers-extender true && ddev composer install && .ddev/uk-site-install.sh && ddev drush status",
+  "customizations": {
+    "codespaces": {
+      "openPorts": [80],
+      "defaultCommand": "ddev drush status",
+      "launch": {
+        "commands": [
+          "echo 'Opening Codespaces Details Tab...'",
+          "bash -c 'sleep 2 && code -r /workspaces/project_template && ddev drush status'"
+        ]
+      },
+      "terminal": {
+        "tabs": [
+          {
+            "name": "Details",
+            "command": "echo 'Codespaces Details Terminal Tab Open'"
+          },
+          {
+            "name": "DDEV Terminal",
+            "command": "bash -c 'ddev drush status'"
+          }
+        ]
+      }
+    }
+  }
 }
