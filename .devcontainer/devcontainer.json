@@ -1,27 +1,40 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:1": {},
-    "ghcr.io/ddev/ddev/install-ddev:latest": {}
+  "name": "Drupal Dev Environment",
+  "build": {
+    "dockerfile": "Dockerfile"
   },
-  "portsAttributes": {
-    "3306": {
-      "label": "database"
-    },
-    "8027": {
-      "label": "mailhog"
-    },
-    "8036": {
-      "label": "phpmyadmin"
-    },
-    "8080": {
-      "label": "web http"
-    },
-    "8443": {
-      "label": "web https"
+  "runArgs": ["--privileged"],
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {
+      "installZsh": true,
+      "username": "codespace"
     }
   },
-  "postCreateCommand": "bash -c 'ddev config global --omit-containers=ddev-router && ddev config --auto && ddev debug download-images'",
-  "postCreateCommand": "ddev start -y",
-  "postStartCommand": "ddev composer global config allow-plugins true && ddev composer config allow-plugins.composer/installers true && ddev composer config allow-plugins.drupal/core-composer-scaffold true && ddev composer config allow-plugins.cweagans/composer-patches true && ddev composer config allow-plugins.zaporylie/composer-drupal-optimizations true && ddev composer config allow-plugins.drupal/console-extend-plugin true && ddev composer config allow-plugins.oomphinc/composer-installers-extender true && ddev composer install && .ddev/uk-site-install.sh"
+  "forwardPorts": [80, 443, 3306, 9003],
+  "portsAttributes": {
+    "80": { "label": "Web Server", "onAutoForward": "openPreview" },
+    "443": { "label": "HTTPS", "onAutoForward": "notify" },
+    "3306": { "label": "MariaDB", "onAutoForward": "silent" },
+    "9003": { "label": "Xdebug", "onAutoForward": "silent" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "editorconfig.editorconfig",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/bin/php",
+        "php.debug.executablePath": "/usr/bin/php",
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": "systemctl start httpd mariadb php-fpm",
+  "remoteUser": "codespace"
 }
