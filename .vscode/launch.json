@@ -51,17 +51,4 @@
             "program": "${file}"
         }
     ],
-    "settings": {
-        "workbench.colorTheme": "Default Dark+"
-    },
-    "terminals": [
-        {
-            "name": "Details",
-            "command": "echo 'Codespaces Details Terminal Tab Open'"
-        },
-        {
-            "name": "DDEV Terminal",
-            "command": "ddev drush status"
-        }
-    ]
 }
